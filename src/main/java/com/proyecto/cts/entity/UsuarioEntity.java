@@ -46,15 +46,23 @@ public class UsuarioEntity {
     private String nombreCompleto;
 
     @Column(name = "username", nullable = false)
-    @NotEmpty(message = "El username no debe estar vacío.")
+    @NotEmpty(message = "El nombre de usuario no debe estar vacío.")
+    @Pattern(regexp = "^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){8,18}[a-zA-Z0-9]$",
+            message = "El nombre de usuario debe constar de caracteres alfanuméricos minúsculas o mayúsculas (a-zA-Z0-9), se permite tambien los signos de punto (.), guión bajo (_) y guión (-).\n" +
+                      "No debe empezar ni terminar con punto (.), guión bajo (_) o guión (-) y no deben aparecer de forma consecutiva, por ejemplo (Mi..usuario ó Mi._usuario).\n" +
+                      "Los signos de punto (.), guión bajo (_) o guión (-) no deben aparecer de forma consecutiva, por ejemplo (Mi..usuario ó Mi._usuario).\n" +
+                      "El número de caracteres mínimo es de 10.\n" +
+                      "El número de caracteres maximo es de 20..")
     private String username;
 
-    @Column(name = "login", nullable = false)
-    @NotEmpty(message = "El login no debe estar vacío.")
-    private String login;
-
     @Column(name = "password", nullable = false)
-    @NotEmpty(message = "El password no debe estar vacío.")
+    @NotEmpty(message = "La clave no debe estar vacía.")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{10,20}$",
+            message = "La clave debe contener al menos un dígito [0-9].\n" +
+                      "La clave debe contener al menos una letra en minúsculas [a-z].\n" +
+                      "La clave debe contener al menos un una letra en mayúsculas [A-Z].\n" +
+                      "La clave debe contener al menos un carácter especial como ! @ # & ( ).\n" +
+                      "La clave debe contener una longitud de al menos 10 caracteres y un máximo de 20 caracteres.")
     private String password;
 
     @Column(name = "email", nullable = false)

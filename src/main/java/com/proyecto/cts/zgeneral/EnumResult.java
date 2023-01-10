@@ -1,7 +1,7 @@
 package com.proyecto.cts.zgeneral;
 
 public enum EnumResult {
-    mensajeError("unknown", "error", "saved", "saveError", "updated", "updateError", "deleted");
+    mensajeError("unknown", "error", "saved", "saveError", "updated", "updateError", "deleted", "deleteError");
     private final String unknown;
     private final String error;
     private final String saved;
@@ -11,7 +11,9 @@ public enum EnumResult {
     private final String updatedError;
     private final String deleted;
 
-    EnumResult(String unknown, String error, String saved, String savedError, String updated, String updatedError, String deleted) {
+    private final String deleteError;
+
+    EnumResult(String unknown, String error, String saved, String savedError, String updated, String updatedError, String deleted, String deleteError) {
         this.unknown = unknown;
         this.error = error;
         this.saved = saved;
@@ -19,6 +21,7 @@ public enum EnumResult {
         this.updated = updated;
         this.updatedError = updatedError;
         this.deleted = deleted;
+        this.deleteError = deleteError;
     }
 
     public String getUnknown() {
@@ -47,5 +50,9 @@ public enum EnumResult {
 
     public String getDeleted() {
         return deleted;
+    }
+
+    public String getDeleteError() {
+        return deleteError;
     }
 }

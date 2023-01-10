@@ -21,10 +21,6 @@ public class SubgrupoProductoController {
     @Autowired
     private SubgrupoProductoService subgrupoproductoService;
 
-    String mensajeError1 = "";
-    String mensajeError2 = "";
-    GeneralResponse generalResponse;
-
     // Listar
     @GetMapping("/List")
     public List<SubgrupoProductoEntity> list() {
@@ -34,38 +30,35 @@ public class SubgrupoProductoController {
     //Insertar
     @PostMapping("/Save")
     public ResponseEntity<GeneralResponse> save(@Validated @RequestBody SubgrupoProductoEntity subgrupoproductoEntity) throws Exception {
-        generalResponse = new GeneralResponse();
+        GeneralResponse response = new GeneralResponse();
+        response.setEstado(EnumResult.mensajeError.getSavedError());
         try {
             SubgrupoProductoEntity savedSubgrupoProducto = subgrupoproductoService.save(subgrupoproductoEntity);
             if (Objects.nonNull(savedSubgrupoProducto)) {
-                generalResponse.setEstado(EnumResult.mensajeError.getSaved());
-                generalResponse.setMensaje1(EnumMsgstatus.ERR0001.getErrorDescripcion());
-                generalResponse.setMensaje2("");
-                return ResponseEntity.status(HttpStatus.CREATED).body(generalResponse);
+                response.setEstado(EnumResult.mensajeError.getSaved());
+                response.setMensaje1(EnumMsgstatus.ERR0001.getErrorDescripcion());
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
-                generalResponse.setEstado(EnumResult.mensajeError.getSavedError());
-                generalResponse.setMensaje1(EnumMsgstatus.ERR0002.getErrorDescripcion());
-                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+                response.setMensaje1(EnumMsgstatus.ERR0002.getErrorDescripcion());
+                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
             }
 
         } catch (Exception error) {
-
-            generalResponse.setEstado(EnumResult.mensajeError.getError());
             switch (error.getMessage()) {
-                case "ERR1001" -> mensajeError1 = EnumMsgstatus.ERR1001.getErrorDescripcion();
-                case "ERR1002" -> mensajeError1 = EnumMsgstatus.ERR1002.getErrorDescripcion();
+                case "ERR1001" -> response.setMensaje1(EnumMsgstatus.ERR1001.getErrorDescripcion());
+                case "ERR1002" -> response.setMensaje1(EnumMsgstatus.ERR1002.getErrorDescripcion());
                 default -> {
-                    mensajeError1 = error.getMessage();
-                    mensajeError2 = String.valueOf(error.getCause().getCause());
+                    response.setMensaje1(String.valueOf(error.getCause().getCause()));
                 }
             }
 
-            generalResponse.setMensaje1(mensajeError1);
-            generalResponse.setMensaje2(mensajeError2);
-            System.out.println(mensajeError1);
-            System.out.println(mensajeError2);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
+            response = response.mensaje(response);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
 
-            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
         }
     }
 
@@ -73,69 +66,63 @@ public class SubgrupoProductoController {
     @PutMapping("/Update/{id}")
     public ResponseEntity<GeneralResponse> update(@Validated @RequestBody SubgrupoProductoEntity subgrupoproductosEntity,
                                                   @PathVariable("id") Long id) {
-        generalResponse = new GeneralResponse();
+        GeneralResponse response = new GeneralResponse();
+        response.setEstado(EnumResult.mensajeError.getUpdatedError());
         try {
             SubgrupoProductoEntity updatedSubgrupoProducto = subgrupoproductoService.update(subgrupoproductosEntity, id);
-
             if (Objects.nonNull(updatedSubgrupoProducto)) {
-                generalResponse.setEstado(EnumResult.mensajeError.getUpdated());
-                generalResponse.setMensaje1(EnumMsgstatus.ERR0001.getErrorDescripcion());
-                generalResponse.setMensaje2("");
-                return ResponseEntity.status(HttpStatus.CREATED).body(generalResponse);
+                response.setEstado(EnumResult.mensajeError.getUpdated());
+                response.setMensaje1(EnumMsgstatus.ERR0001.getErrorDescripcion());
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
-                generalResponse.setEstado(EnumResult.mensajeError.getUpdatedError());
-                generalResponse.setMensaje1(EnumMsgstatus.ERR0002.getErrorDescripcion());
-                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+                response.setMensaje1(EnumMsgstatus.ERR0002.getErrorDescripcion());
+                return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
             }
-
         } catch (Exception error) {
-
-            generalResponse.setEstado(EnumResult.mensajeError.getError());
             switch (error.getMessage()) {
-                case "ERR1001" -> mensajeError1 = EnumMsgstatus.ERR1001.getErrorDescripcion();
-                case "ERR1002" -> mensajeError1 = EnumMsgstatus.ERR1002.getErrorDescripcion();
-                case "ERR1998" -> mensajeError1 = EnumMsgstatus.ERR1998.getErrorDescripcion();
+                case "ERR1001" -> response.setMensaje1(EnumMsgstatus.ERR1001.getErrorDescripcion());
+                case "ERR1002" -> response.setMensaje1(EnumMsgstatus.ERR1002.getErrorDescripcion());
+                case "ERR1998" -> response.setMensaje1(EnumMsgstatus.ERR1998.getErrorDescripcion());
                 default -> {
-                    mensajeError1 = error.getMessage();
-                    mensajeError2 = String.valueOf(error.getCause().getCause());
+                    response.setMensaje1(String.valueOf(error.getCause().getCause()));
+                    return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
                 }
             }
 
-            generalResponse.setMensaje1(mensajeError1);
-            generalResponse.setMensaje2(mensajeError2);
-            System.out.println(mensajeError1);
-            System.out.println(mensajeError2);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
+            response = response.mensaje(response);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
 
-            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
         }
     }
 
     // Borrar
     @DeleteMapping("/Delete/{id}")
     public ResponseEntity<GeneralResponse> deleteById(@PathVariable("id") Long id) throws Exception {
-        generalResponse = new GeneralResponse();
+        GeneralResponse response = new GeneralResponse();
+        response.setEstado(EnumResult.mensajeError.getDeleteError());
         try {
-            SubgrupoProductoEntity deletedSubgrupoProducto = subgrupoproductoService.deleteById(id);
-            generalResponse.setEstado(EnumResult.mensajeError.getDeleted());
-            generalResponse.setMensaje1(EnumMsgstatus.ERR1701.getErrorDescripcion());
-            generalResponse.setMensaje2("");
-            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+            subgrupoproductoService.deleteById(id);
+            response.setEstado(EnumResult.mensajeError.getDeleted());
+            response.setMensaje1(EnumMsgstatus.ERR1701.getErrorDescripcion());
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
         } catch (Exception error) {
-
-            generalResponse.setEstado(EnumResult.mensajeError.getError());
             if ("ERR1998".equals(error.getMessage())) {
-                mensajeError1 = EnumMsgstatus.ERR1998.getErrorDescripcion();
+                response.setMensaje1(EnumMsgstatus.ERR1998.getErrorDescripcion());
             } else {
-                mensajeError1 = error.getMessage();
-                mensajeError2 = String.valueOf(error.getCause().getCause());
+                response.setMensaje1(String.valueOf(error.getCause().getCause()));
             }
 
-            generalResponse.setMensaje1(mensajeError1);
-            generalResponse.setMensaje2(mensajeError2);
-            System.out.println(mensajeError1);
-            System.out.println(mensajeError2);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
+            response = response.mensaje(response);
+            System.out.println(response.getMensaje1());
+            System.out.println(response.getMensaje2());
 
-            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(generalResponse);
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(response);
         }
     }
 }

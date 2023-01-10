@@ -30,6 +30,6 @@ public class RolEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
-    private ERoles name;
+    private ERoles tipo;
 
 }

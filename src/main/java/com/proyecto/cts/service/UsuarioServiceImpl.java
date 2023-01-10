@@ -27,10 +27,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setFechaCreacion(LocalDateTime.parse(general.fechaActual(2)));
         usuario.setFechaModificacion(usuario.getFechaCreacion());
 
-        if (usuarioRepository.findByLoginContar(usuario.getLogin()) != 0) {
+        if (usuarioRepository.findByLoginContar(usuario.getUsername()) != 0) {
             throw new Exception(EnumMsgstatus.ERR1003.getErrorNumero());
         }
-        if (usuarioRepository.findByValidarDuplicados( usuario.getNombreCompleto(), usuario.getLogin(), usuario.getPassword(), usuario.getEmail()) != 0) {
+        if (usuarioRepository.findByValidarDuplicados( usuario.getNombreCompleto(), usuario.getUsername(), usuario.getPassword(), usuario.getEmail()) != 0) {
             throw new Exception(EnumMsgstatus.ERR1999.getErrorNumero());
         }
         return usuarioRepository.save(usuario);
@@ -53,13 +53,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
             usuario = aMayusculas(usuario);
 
-            if (!(usuarioDb.getLogin().equals(usuario.getLogin()))) {
-                if (usuarioRepository.findByLoginContar(usuario.getLogin()) != 0) {
+            if (!(usuarioDb.getUsername().equals(usuario.getUsername()))) {
+                if (usuarioRepository.findByLoginContar(usuario.getUsername()) != 0) {
                     throw new Exception(EnumMsgstatus.ERR1003.getErrorNumero());
                 }
             }
 
-            if (usuarioRepository.findByValidarDuplicados( usuario.getNombreCompleto(), usuario.getLogin(), usuario.getPassword(), usuario.getEmail()) != 0) {
+            if (usuarioRepository.findByValidarDuplicados( usuario.getNombreCompleto(), usuario.getUsername(), usuario.getPassword(), usuario.getEmail()) != 0) {
                 throw new Exception(EnumMsgstatus.ERR1999.getErrorNumero());
             }
 
@@ -88,19 +88,19 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setSegundoApellido(usuario.getSegundoApellido().toUpperCase());
         usuario.setNombreCompleto(usuario.getPrimerNombre() + " " + usuario.getSegundoNombre() + " " +
                 usuario.getPrimerApellido() + " " + usuario.getSegundoApellido());
-        usuario.setLogin(usuario.getLogin().toUpperCase());
+        //usuario.setUsername(usuario.getUsername().toUpperCase());
 
         return usuario;
     }
 
     @Override
-    public Long findByLoginContar(String login) {
-        return usuarioRepository.findByLoginContar(login);
+    public Long findByLoginContar(String Username) {
+        return usuarioRepository.findByLoginContar(Username);
     }
 
     @Override
-    public Long findByValidarDuplicados(String nombreCompleto,String login, String password, String email) {
-        return usuarioRepository.findByValidarDuplicados( nombreCompleto, login, password, email);
+    public Long findByValidarDuplicados(String nombreCompleto,String userName, String password, String email) {
+        return usuarioRepository.findByValidarDuplicados( nombreCompleto, userName, password, email);
     }
 
     @Override

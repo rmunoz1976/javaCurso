@@ -19,9 +19,9 @@ public interface UsuarioService {
 
     UsuarioEntity aMayusculas(UsuarioEntity usuario);
 
-    Long findByLoginContar(String login);
+    Long findByLoginContar(String userName);
 
-    Long findByValidarDuplicados(String nombreCompleto, String login, String password, String email);
+    Long findByValidarDuplicados(String nombreCompleto, String userName, String password, String email);
 
     Long searchById(Long id);
 
