@@ -21,6 +21,6 @@ public interface RolRepository  extends JpaRepository<RolEntity, Long>  {
     @Query(value = "SELECT COUNT(*) FROM " + sqlTabla + " t WHERE t.id = ?1", nativeQuery = true)
     Long searchById(Long id);
 
-    Optional<RolEntity> findByName(ERoles name);
+    Optional<RolEntity> findByTipo(ERoles tipo);
 
 }
